@@ -1,0 +1,121 @@
+import React from 'react';
+
+interface LoadingStreamProps extends React.SVGProps<SVGSVGElement> {
+  size?: number;
+}
+
+export function LoadingStream({ size = 56, className, ...props }: LoadingStreamProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 56 56"
+      width={size}
+      height={size}
+      role="img"
+      aria-label="Loading stream"
+      className={className}
+      {...props}
+    >
+      <title>Stream</title>
+      <desc>Tokens emit in reading order, top-left to bottom-right.</desc>
+      <defs>
+        <circle id="b" r="2.4" fill="currentColor" opacity="0.07" />
+        <circle id="l" r="3.1" fill="currentColor" />
+      </defs>
+      <style>{`
+        .l-dot {
+          opacity: 0;
+          animation: icon-20-k 2400ms cubic-bezier(0.25, 1, 0.5, 1) infinite both;
+        }
+        @keyframes icon-20-k {
+          0% { opacity: 0; }
+          4% { opacity: 1; }
+          26% { opacity: 0.08; }
+          100% { opacity: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .l-dot {
+            animation: none;
+            opacity: 0.45;
+          }
+        }
+        .d00 { animation-delay: 0ms; }
+        .d01 { animation-delay: 86ms; }
+        .d02 { animation-delay: 171ms; }
+        .d03 { animation-delay: 257ms; }
+        .d04 { animation-delay: 343ms; }
+        .d10 { animation-delay: 429ms; }
+        .d11 { animation-delay: 514ms; }
+        .d12 { animation-delay: 600ms; }
+        .d13 { animation-delay: 686ms; }
+        .d14 { animation-delay: 771ms; }
+        .d20 { animation-delay: 857ms; }
+        .d21 { animation-delay: 943ms; }
+        .d22 { animation-delay: 1029ms; }
+        .d23 { animation-delay: 1114ms; }
+        .d24 { animation-delay: 1200ms; }
+        .d30 { animation-delay: 1286ms; }
+        .d31 { animation-delay: 1371ms; }
+        .d32 { animation-delay: 1457ms; }
+        .d33 { animation-delay: 1543ms; }
+        .d34 { animation-delay: 1629ms; }
+        .d40 { animation-delay: 1714ms; }
+        .d41 { animation-delay: 1800ms; }
+        .d42 { animation-delay: 1886ms; }
+        .d43 { animation-delay: 1971ms; }
+        .d44 { animation-delay: 2057ms; }
+      `}</style>
+      <use href="#b" x="6" y="6" />
+      <use href="#b" x="17" y="6" />
+      <use href="#b" x="28" y="6" />
+      <use href="#b" x="39" y="6" />
+      <use href="#b" x="50" y="6" />
+      <use href="#b" x="6" y="17" />
+      <use href="#b" x="17" y="17" />
+      <use href="#b" x="28" y="17" />
+      <use href="#b" x="39" y="17" />
+      <use href="#b" x="50" y="17" />
+      <use href="#b" x="6" y="28" />
+      <use href="#b" x="17" y="28" />
+      <use href="#b" x="28" y="28" />
+      <use href="#b" x="39" y="28" />
+      <use href="#b" x="50" y="28" />
+      <use href="#b" x="6" y="39" />
+      <use href="#b" x="17" y="39" />
+      <use href="#b" x="28" y="39" />
+      <use href="#b" x="39" y="39" />
+      <use href="#b" x="50" y="39" />
+      <use href="#b" x="6" y="50" />
+      <use href="#b" x="17" y="50" />
+      <use href="#b" x="28" y="50" />
+      <use href="#b" x="39" y="50" />
+      <use href="#b" x="50" y="50" />
+      
+      <use className="l-dot d00" href="#l" x="6" y="6" />
+      <use className="l-dot d01" href="#l" x="17" y="6" />
+      <use className="l-dot d02" href="#l" x="28" y="6" />
+      <use className="l-dot d03" href="#l" x="39" y="6" />
+      <use className="l-dot d04" href="#l" x="50" y="6" />
+      <use className="l-dot d10" href="#l" x="6" y="17" />
+      <use className="l-dot d11" href="#l" x="17" y="17" />
+      <use className="l-dot d12" href="#l" x="28" y="17" />
+      <use className="l-dot d13" href="#l" x="39" y="17" />
+      <use className="l-dot d14" href="#l" x="50" y="17" />
+      <use className="l-dot d20" href="#l" x="6" y="28" />
+      <use className="l-dot d21" href="#l" x="17" y="28" />
+      <use className="l-dot d22" href="#l" x="28" y="28" />
+      <use className="l-dot d23" href="#l" x="39" y="28" />
+      <use className="l-dot d24" href="#l" x="50" y="28" />
+      <use className="l-dot d30" href="#l" x="6" y="39" />
+      <use className="l-dot d31" href="#l" x="17" y="39" />
+      <use className="l-dot d32" href="#l" x="28" y="39" />
+      <use className="l-dot d33" href="#l" x="39" y="39" />
+      <use className="l-dot d34" href="#l" x="50" y="39" />
+      <use className="l-dot d40" href="#l" x="6" y="50" />
+      <use className="l-dot d41" href="#l" x="17" y="50" />
+      <use className="l-dot d42" href="#l" x="28" y="50" />
+      <use className="l-dot d43" href="#l" x="39" y="50" />
+      <use className="l-dot d44" href="#l" x="50" y="50" />
+    </svg>
+  );
+}
