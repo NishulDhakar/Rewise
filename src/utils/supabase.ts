@@ -1,11 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_APP_URL || '';
-const supabaseAnonKey = process.env.NEXT_APP_SUPABASE_ANON || '';
+const supabaseUrl = process.env.NEXT_APP_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = process.env.NEXT_APP_SUPABASE_ANON || 'placeholder-key';
 
-if (!supabaseUrl || !supabaseAnonKey) {
+if (!process.env.NEXT_APP_URL || !process.env.NEXT_APP_SUPABASE_ANON) {
   console.warn(
-    'Supabase environment variables are missing. Please verify NEXT_APP_URL and NEXT_APP_SUPABASE_ANON are set.'
+    'Supabase environment variables (NEXT_APP_URL / NEXT_APP_SUPABASE_ANON) are missing. Using build-time placeholders.'
   );
 }
 
