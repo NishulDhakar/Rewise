@@ -11,13 +11,25 @@ import {
   deleteTodoAction,
   addDefaultTodoAction,
   deleteDefaultTodoAction,
-  applyDefaultTodosAction
+  applyDefaultTodosAction,
+  setSessionCookieAction,
+  clearSessionCookieAction,
+  migrateAnonymousTodosAction
 } from '../app/actions';
 import TodoColumn from './TodoColumn';
 import RevisionColumn from './RevisionColumn';
 import MasteredColumn from './MasteredColumn';
+import { supabase } from '../utils/supabase';
+import AuthButton from './AuthButton';
+
+interface UserProfile {
+  name: string | null;
+  email: string | null;
+  avatarUrl: string | null;
+}
 
 interface DashboardClientProps {
+  user: UserProfile | null;
   initialTodos: Todo[];
   initialRevisions: (Revision & { todos: Todo | null })[];
   initialMastered: (MasteredTopic & { todos: Todo | null })[];
@@ -25,6 +37,7 @@ interface DashboardClientProps {
 }
 
 export default function DashboardClient({
+  user,
   initialTodos,
   initialRevisions,
   initialMastered,
@@ -51,6 +64,32 @@ export default function DashboardClient({
   // Transition state for database mutations
   const [isPending, startTransition] = useTransition();
   const [actionId, setActionId] = useState<string | null>(null);
+
+  // Listen to Auth State Changes to update session cookies and migrate anonymous data
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session) {
+        // Sync session cookie to server
+        await setSessionCookieAction(session.access_token);
+        
+        // If signed in, migrate anonymous tasks
+        if (event === 'SIGNED_IN') {
+          await migrateAnonymousTodosAction();
+        }
+      } else {
+        // Clear session cookie only if it exists, to avoid redundant requests on initial load
+        if (document.cookie.includes('rewise_session_token')) {
+          await clearSessionCookieAction();
+        }
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   // Auto-apply daily defaults once per day
   useEffect(() => {
@@ -175,6 +214,8 @@ export default function DashboardClient({
           <span>{revisions.length} revisions pending</span>
           <span className="h-4 w-px bg-border-subtle"></span>
           <span className="text-brand-green">{mastered.length} mastered</span>
+          <span className="hidden sm:inline h-4 w-px bg-border-subtle"></span>
+          <AuthButton user={user} />
         </div>
       </header>
 

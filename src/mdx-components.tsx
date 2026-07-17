@@ -75,6 +75,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </a>
       );
     },
+    
     hr: () => <hr className="my-10 border-border-subtle border-dashed" />,
     table: ({ children }) => (
       <div className="overflow-x-auto my-8 rounded-lg border border-border-subtle">

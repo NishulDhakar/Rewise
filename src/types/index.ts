@@ -1,5 +1,6 @@
 export interface Todo {
   id: string;
+  anonymous_id?: string;
   title: string;
   description: string | null;
   type: 'learning' | 'daily';
@@ -26,6 +27,7 @@ export interface MasteredTopic {
 
 export interface DefaultTodo {
   id: string;
+  anonymous_id?: string;
   title: string;
   description: string | null;
   created_at: string;
