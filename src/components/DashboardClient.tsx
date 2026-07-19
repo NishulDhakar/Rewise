@@ -21,6 +21,7 @@ import RevisionColumn from './RevisionColumn';
 import MasteredColumn from './MasteredColumn';
 import { supabase } from '../utils/supabase';
 import AuthButton from './AuthButton';
+import { AnimatedThemeToggler } from './ui/animated-theme-toggler';
 
 interface UserProfile {
   name: string | null;
@@ -73,7 +74,7 @@ export default function DashboardClient({
       if (session) {
         // Sync session cookie to server
         await setSessionCookieAction(session.access_token);
-        
+
         // If signed in, migrate anonymous tasks
         if (event === 'SIGNED_IN') {
           await migrateAnonymousTodosAction();
@@ -180,41 +181,44 @@ export default function DashboardClient({
       {/* Header Banner */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-border-subtle pb-6">
         <div>
-          <h1 className="text-3xl font-black tracking-widest text-brand-cyan flex items-center gap-2">
-            REWISE 
+          <h1 className="text-3xl font-black tracking-widest text-brand-cyan flex items-center gap-2 font-doto">
+            REWISE
           </h1>
           <p className="text-xs text-text-gray tracking-wider mt-1 font-sans">
             SPACED REPETITION TASK MANAGER
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-gray">
-          <Link
-            href="/blogs"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            Blog
-          </Link>
+        <div className="flex flex-wrap items-center gap-4 text-xs font-sans">
           <Link
             href="/clock"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold">
-            <Clock className="w-3.5 h-3.5" />
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark text-text-white hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold">
+            <Clock className="w-3.5 h-3.5 text-text-gray" />
             Clock
           </Link>
           <Link
             href="/time-spent"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark text-text-white hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
           >
-            <Activity className="w-3.5 h-3.5" />
+            <Activity className="w-3.5 h-3.5 text-text-gray" />
             Time Spent
           </Link>
-          <span className="hidden sm:inline h-4 w-px bg-border-subtle"></span>
-          <span>{todos.length} active todos</span>
+
+          <Link
+            href="/blogs"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark text-text-white hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-text-gray" />
+            Blog
+          </Link>
+          
+          {/* <span className="hidden sm:inline h-4 w-px bg-border-subtle"></span> */}
+          {/* <span>{todos.length} active todos</span>
           <span className="h-4 w-px bg-border-subtle"></span>
           <span>{revisions.length} revisions pending</span>
           <span className="h-4 w-px bg-border-subtle"></span>
-          <span className="text-brand-green">{mastered.length} mastered</span>
-          <span className="hidden sm:inline h-4 w-px bg-border-subtle"></span>
+          <span className="text-brand-green">{mastered.length} mastered</span> */}
+          {/* <span className="hidden sm:inline h-4 w-px bg-border-subtle"></span> */}
+          <AnimatedThemeToggler className="flex items-center justify-center p-2 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold text-text-gray" />
           <AuthButton user={user} />
         </div>
       </header>
@@ -258,14 +262,14 @@ export default function DashboardClient({
       {/* Default Tasks Modal */}
       {isDefaultsOpen && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-4 z-50 animate-fadeIn backdrop-blur-sm">
-          <div className="bg-card-dark border border-border-glow rounded-xl p-6 max-w-lg w-full max-h-[85vh] flex flex-col font-doto text-text-white">
+          <div className="bg-card-dark border border-border-glow rounded-xl p-6 max-w-lg w-full max-h-[85vh] flex flex-col text-text-white">
             <div className="flex justify-between items-center mb-4 border-b border-border-subtle pb-3">
               <h3 className="text-md font-bold tracking-wider text-brand-green flex items-center gap-1.5">
                 Manage Default Daily Tasks
               </h3>
               <button
                 onClick={() => setIsDefaultsOpen(false)}
-                className="text-text-dim hover:text-white text-xs font-sans font-bold border border-border-subtle rounded px-2 py-1 bg-bg-dark/50"
+                className="text-text-dim   text-xs font-sans font-bold border border-border-subtle rounded px-2 py-1 bg-bg-dark/50"
               >
                 ESC / CLOSE
               </button>
@@ -340,14 +344,14 @@ export default function DashboardClient({
       {/* SRP Explanation Modal */}
       {isSRPOpen && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-4 z-50 animate-fadeIn backdrop-blur-sm">
-          <div className="bg-card-dark border border-border-glow rounded-xl p-6 max-w-lg w-full max-h-[85vh] flex flex-col font-doto text-text-white shadow-2xl relative">
+          <div className="bg-card-dark border border-border-glow rounded-xl p-6 max-w-lg w-full max-h-[85vh] flex flex-col text-text-white shadow-2xl relative">
             <div className="flex justify-between items-center mb-4 border-b border-border-subtle pb-3">
               <h3 className="text-md font-bold tracking-wider text-brand-cyan flex items-center gap-1.5">
                 Spaced Repetition (SRP)
               </h3>
               <button
                 onClick={() => setIsSRPOpen(false)}
-                className="text-text-dim hover:text-white text-xs font-sans font-bold border border-border-subtle rounded px-2 py-1 bg-bg-dark/50 hover:border-brand-cyan transition-all"
+                className="text-text-dim   text-xs font-sans font-bold border border-border-subtle rounded px-2 py-1 bg-bg-dark/50 hover:border-brand-cyan transition-all"
               >
                 ESC / CLOSE
               </button>
@@ -362,8 +366,8 @@ export default function DashboardClient({
               </div>
 
               <div className="bg-bg-dark/40 border border-border-subtle p-3 rounded-lg">
-                <p className="font-bold text-brand-purple mb-2 tracking-wider font-doto text-[11px]">THE REWISE LEARNING CYCLE</p>
-                <div className="flex items-center justify-between gap-1 text-center font-doto text-[9px] text-text-dim">
+                <p className="font-bold text-brand-purple mb-2 tracking-wider font-mono text-[11px]">THE REWISE LEARNING CYCLE</p>
+                <div className="flex items-center justify-between gap-1 text-center font-mono text-[10px] text-text-dim">
                   <div className="flex-1 bg-border-subtle/30 p-1.5 rounded border border-border-subtle">
                     {/* <span className="block text-text-white font-bold font-sans">Todo</span> */}
                     <span className='text-text-white text-lg'>Start</span>

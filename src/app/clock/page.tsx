@@ -22,6 +22,7 @@ import {
   Star,
   BookOpen
 } from 'lucide-react';
+import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler';
 
 // ==========================================
 // Types
@@ -171,7 +172,10 @@ export default function ClockPage() {
         setIsProjDropdownOpen(false);
       }
       if (rowMenuRef.current && !rowMenuRef.current.contains(event.target as Node)) {
-        setActiveMenuId(null);
+        const target = event.target as HTMLElement;
+        if (!target.closest('[data-menu-trigger]')) {
+          setActiveMenuId(null);
+        }
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -339,12 +343,12 @@ export default function ClockPage() {
     setEditingEntry(entry);
     setEditDesc(entry.description === 'Add description' ? '' : entry.description);
     setEditProjId(entry.projectId);
-    
+
     // Format ISO string to datetime-local format (YYYY-MM-DDTHH:MM)
     const localStart = new Date(entry.startTime);
     const tzOffset = localStart.getTimezoneOffset() * 60000; // offset in milliseconds
     const formattedStart = new Date(localStart.getTime() - tzOffset).toISOString().slice(0, 16);
-    
+
     const localEnd = new Date(entry.endTime);
     const formattedEnd = new Date(localEnd.getTime() - tzOffset).toISOString().slice(0, 16);
 
@@ -554,7 +558,7 @@ export default function ClockPage() {
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-border-subtle pb-6">
         <div>
           <Link href="/">
-            <h1 className="text-3xl font-black tracking-widest text-brand-cyan flex items-center gap-2 hover:opacity-85 transition-opacity">
+            <h1 className="text-3xl font-black tracking-widest text-brand-cyan flex items-center gap-2 hover:opacity-85 transition-opacity font-doto">
               REWISE
             </h1>
           </Link>
@@ -562,19 +566,20 @@ export default function ClockPage() {
             SPACED REPETITION TASK MANAGER
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-gray">
+        <div className="flex flex-wrap items-center gap-4 text-xs font-sans">
+          <AnimatedThemeToggler className="flex items-center justify-center p-2 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold text-text-gray" />
           <Link
             href="/"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark text-text-white hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="w-3.5 h-3.5 text-text-gray" />
             Dashboard
           </Link>
           <Link
             href="/time-spent"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark text-text-white hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
           >
-            <Clock className="w-3.5 h-3.5" />
+            <Clock className="w-3.5 h-3.5 text-text-gray" />
             Time Spent
           </Link>
         </div>
@@ -597,7 +602,7 @@ export default function ClockPage() {
 
         {/* Right: Controls (Project, Time, Action Button) */}
         <div className="flex flex-wrap items-center justify-between md:justify-end gap-4 w-full md:w-auto">
-          
+
           {/* Project Picker Trigger */}
           <div className="relative" ref={projDropdownRef}>
             <button
@@ -614,8 +619,8 @@ export default function ClockPage() {
                 </>
               ) : (
                 <>
-                  <Plus className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-                  <span className="font-semibold text-brand-cyan">Project</span>
+                  <Plus className="w-3.5 h-3.5 text-text-gray shrink-0" />
+                  <span className="text-xs font-bold">Project</span>
                 </>
               )}
               <ChevronDown className="w-3.5 h-3.5 opacity-60 shrink-0" />
@@ -643,7 +648,7 @@ export default function ClockPage() {
                       <div className="text-[10px] text-text-dim font-bold tracking-widest uppercase mb-1">
                         Projects
                       </div>
-                      
+
                       {filteredProjects.length === 0 ? (
                         <div className="text-xs text-text-dim py-3 text-center">No projects found</div>
                       ) : (
@@ -654,7 +659,7 @@ export default function ClockPage() {
                               setSelectedProjectId(proj.id);
                               setIsProjDropdownOpen(false);
                             }}
-                            className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-bg-dark text-left text-xs text-text-gray hover:text-white transition-all group cursor-pointer"
+                            className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-bg-dark text-left text-xs text-text-gray   transition-all group cursor-pointer"
                           >
                             <div className="flex items-center gap-2 truncate">
                               <span
@@ -670,9 +675,8 @@ export default function ClockPage() {
                               <button
                                 type="button"
                                 onClick={(e) => toggleFavoriteProject(proj.id, e)}
-                                className={`opacity-0 group-hover:opacity-100 hover:scale-110 transition-all cursor-pointer ${
-                                  proj.isFavorite ? 'opacity-100 text-amber-400' : 'text-text-dim hover:text-amber-400'
-                                }`}
+                                className={`opacity-0 group-hover:opacity-100 hover:scale-110 transition-all cursor-pointer ${proj.isFavorite ? 'opacity-100 text-amber-400' : 'text-text-dim hover:text-amber-400'
+                                  }`}
                               >
                                 <Star className="w-3.5 h-3.5 fill-current" />
                               </button>
@@ -708,7 +712,7 @@ export default function ClockPage() {
                       required
                       autoFocus
                     />
-                    
+
                     {/* Colors swatches */}
                     <div>
                       <div className="text-[10px] text-text-dim mb-1 uppercase tracking-wider">Select Color</div>
@@ -753,7 +757,9 @@ export default function ClockPage() {
           <span className="hidden md:inline h-4 w-px bg-border-subtle" />
 
           {/* Running Clock Duration Display */}
-          <div className="font-doto text-xl font-bold tracking-widest text-text-white min-w-[90px] text-right">
+          <div className={`font-mono text-xl font-black tracking-widest min-w-[90px] text-right transition-colors ${
+            timer.isRunning ? 'text-brand-cyan animate-pulse' : 'text-text-white'
+          }`}>
             {formatDuration(timer.isRunning ? tickerSeconds : 0)}
           </div>
 
@@ -789,7 +795,7 @@ export default function ClockPage() {
           </h2>
           <div className="flex items-center gap-2 text-xs text-text-gray font-sans">
             <span>Total Tracked:</span>
-            <span className="font-doto font-bold text-brand-green tracking-wider text-sm">
+            <span className="font-mono font-bold tracking-wider text-sm">
               {formatDuration(totalTrackedTime)}
             </span>
           </div>
@@ -813,7 +819,7 @@ export default function ClockPage() {
                   <span className="font-bold text-text-white tracking-wider">{day.dateLabel}</span>
                   <div className="flex items-center gap-1.5 font-bold text-text-gray">
                     <span>Total:</span>
-                    <span className="font-doto tracking-wider text-text-white">
+                    <span className="font-bold tracking-wider text-brand-cyan">
                       {formatDuration(day.totalDuration)}
                     </span>
                   </div>
@@ -830,23 +836,21 @@ export default function ClockPage() {
                     return (
                       <div
                         key={groupKey}
-                        className={`border border-border-subtle rounded-lg bg-bg-dark/20 overflow-hidden transition-all ${
-                          isExpanded ? 'border-border-glow' : ''
-                        }`}
+                        className={`border border-border-subtle rounded-lg bg-bg-dark/20 transition-all ${isExpanded ? 'border-border-glow' : ''
+                          }`}
                       >
                         {/* Main Group Header Row */}
                         <div
                           onClick={() => isGrouped && toggleGroupExpand(groupKey)}
-                          className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 gap-3 transition-colors ${
-                            isGrouped ? 'cursor-pointer hover:bg-bg-dark/40' : ''
-                          }`}
+                          className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 gap-3 transition-colors ${isGrouped ? 'cursor-pointer hover:bg-bg-dark/40' : ''
+                            }`}
                         >
                           {/* Left Details */}
                           <div className="flex items-center gap-3 min-w-0 flex-1">
                             {/* Occurrences count badge (Toggl Style) */}
                             {isGrouped ? (
                               <div
-                                className="w-6 h-6 rounded border flex items-center justify-center font-doto text-[10px] font-bold select-none shrink-0"
+                                className="w-6 h-6 rounded border flex items-center justify-center font-mono text-[10px] font-bold select-none shrink-0"
                                 style={{
                                   backgroundColor: `${projDetails.color}15`,
                                   color: projDetails.color,
@@ -887,7 +891,7 @@ export default function ClockPage() {
 
                           {/* Right Controls */}
                           <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto shrink-0 border-t border-border-subtle/30 sm:border-0 pt-2 sm:pt-0">
-                            
+
                             {/* Show details toggler icon (chevron) */}
                             {isGrouped && (
                               <span className="text-[10px] text-text-dim flex items-center gap-1 font-bold font-sans">
@@ -904,8 +908,8 @@ export default function ClockPage() {
                             )}
 
                             {/* Interval Range Display */}
-                            <div className="text-[10px] text-text-dim font-sans flex items-center gap-1">
-                              <Calendar className="w-3 h-3" />
+                            <div className="text-[14px] font-light text-text-gray font-sans flex items-center gap-1">
+                              <Calendar className="w-3 h-3 text-text-dim" />
                               <span>
                                 {isGrouped
                                   ? `${group.entries.length} segments`
@@ -914,13 +918,13 @@ export default function ClockPage() {
                             </div>
 
                             {/* Group Duration */}
-                            <div className="font-doto text-xs font-bold text-text-white tracking-widest min-w-[70px] text-right">
+                            <div className="font-mono text-xs font-light tracking-widest min-w-[70px] text-right">
                               {formatDuration(group.totalDuration)}
                             </div>
 
                             {/* Action Buttons for non-grouped, or group operations */}
                             <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
-                              
+
                               {/* PLAY / RESTART TIMER */}
                               <button
                                 onClick={() => handleRestartEntry(group.description, group.projectId)}
@@ -933,6 +937,7 @@ export default function ClockPage() {
                               {/* Ellipsis Options Trigger */}
                               <div className="relative">
                                 <button
+                                  data-menu-trigger={groupKey}
                                   onClick={() => setActiveMenuId(activeMenuId === groupKey ? null : groupKey)}
                                   className="p-1.5 rounded-lg border border-border-subtle hover:border-brand-cyan text-text-dim hover:text-brand-cyan transition-all cursor-pointer"
                                   title="Actions"
@@ -950,7 +955,7 @@ export default function ClockPage() {
                                       <>
                                         <button
                                           onClick={() => openEditModal(group.entries[0])}
-                                          className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-bg-dark hover:text-white cursor-pointer"
+                                          className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-bg-dark   cursor-pointer"
                                         >
                                           <Edit2 className="w-3.5 h-3.5 text-brand-cyan" />
                                           Edit Entry
@@ -987,7 +992,7 @@ export default function ClockPage() {
 
                         {/* Group occurrences expanded sub-list */}
                         {isGrouped && isExpanded && (
-                          <div className="border-t border-border-subtle bg-bg-dark/10 divide-y divide-border-subtle/30 font-sans">
+                          <div className="border-t border-border-subtle bg-bg-dark/10 divide-y divide-border-subtle/30 font-sans rounded-b-lg">
                             {group.entries.map((subEntry) => {
                               return (
                                 <div
@@ -996,15 +1001,15 @@ export default function ClockPage() {
                                 >
                                   {/* Left: Time and description detail */}
                                   <div className="flex items-center gap-3">
-                                    <div className="text-[10px] text-text-dim font-sans flex items-center gap-1 bg-bg-dark/30 px-2 py-0.5 rounded border border-border-subtle/50">
+                                    <div className="text-[10px] font-semibold text-text-gray font-sans flex items-center gap-1 bg-bg-dark/30 px-2 py-0.5 rounded border border-border-subtle/50">
                                       <span>{formatTimeRange(subEntry.startTime, subEntry.endTime)}</span>
                                     </div>
-                                    <span className="text-[10px] text-text-dim italic">Occurred</span>
+                                    <span className="text-[10px] text-text-gray/80 font-medium italic">Occurred</span>
                                   </div>
 
                                   {/* Right: Duration, actions */}
                                   <div className="flex items-center gap-4 ml-auto sm:ml-0 shrink-0">
-                                    <div className="font-doto text-[11px] font-semibold text-text-gray tracking-widest">
+                                    <div className="font-mono text-[11px] font-bold text-text-white tracking-widest">
                                       {formatDuration(subEntry.duration)}
                                     </div>
 
@@ -1052,7 +1057,7 @@ export default function ClockPage() {
               </h3>
               <button
                 onClick={() => setEditingEntry(null)}
-                className="text-text-dim hover:text-white text-xs border border-border-subtle rounded px-2 py-1 bg-bg-dark/50 cursor-pointer"
+                className="text-text-dim   text-xs border border-border-subtle rounded px-2 py-1 bg-bg-dark/50 cursor-pointer"
               >
                 Close
               </button>
@@ -1109,7 +1114,7 @@ export default function ClockPage() {
                         setEditProjId(null);
                         setEditProjDropdownOpen(false);
                       }}
-                      className="w-full flex items-center gap-2 p-2 hover:bg-bg-dark text-left text-text-dim hover:text-white cursor-pointer"
+                      className="w-full flex items-center gap-2 p-2 hover:bg-bg-dark text-left text-text-dim   cursor-pointer"
                     >
                       <span className="w-2 h-2 rounded-full bg-slate-500 shrink-0" />
                       <span>No Project</span>
@@ -1122,7 +1127,7 @@ export default function ClockPage() {
                           setEditProjId(proj.id);
                           setEditProjDropdownOpen(false);
                         }}
-                        className="w-full flex items-center justify-between p-2 hover:bg-bg-dark text-left hover:text-white transition-all text-text-gray cursor-pointer"
+                        className="w-full flex items-center justify-between p-2 hover:bg-bg-dark text-left   transition-all text-text-gray cursor-pointer"
                       >
                         <span className="flex items-center gap-2 truncate">
                           <span

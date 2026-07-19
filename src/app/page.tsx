@@ -2,23 +2,33 @@ import { getServerSupabase } from '../utils/supabase-server';
 import DashboardClient from '../components/DashboardClient';
 import { Todo, Revision, MasteredTopic, DefaultTodo } from '../types';
 import { getAnonymousId } from '../utils/anonymous';
+import { cookies } from 'next/headers';
 
 export const revalidate = 0; // Disable static rendering to ensure dynamic database reads on every load
 
 export default async function HomePage() {
-  const client = await getServerSupabase();
-  const anonymousId = await getAnonymousId();
+  const [client, anonymousId, cookieStore] = await Promise.all([
+    getServerSupabase(),
+    getAnonymousId(),
+    cookies(),
+  ]);
   
-  // Fetch user if authenticated
-  const { data: { user } } = await client.auth.getUser().catch(() => ({ data: { user: null } }));
-  const userId = user?.id || null;
+  // Only check Supabase user if session cookie is present to save on API overhead
+  const hasToken = cookieStore.has('rewise_session_token');
+  let userId: string | null = null;
+  let userProfile = null;
 
-  // Build user profile details
-  const userProfile = user ? {
-    name: user.user_metadata?.full_name || user.user_metadata?.name || null,
-    email: user.email || null,
-    avatarUrl: user.user_metadata?.avatar_url || null,
-  } : null;
+  if (hasToken) {
+    const { data: { user } } = await client.auth.getUser().catch(() => ({ data: { user: null } }));
+    if (user) {
+      userId = user.id;
+      userProfile = {
+        name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+        email: user.email || null,
+        avatarUrl: user.user_metadata?.avatar_url || null,
+      };
+    }
+  }
 
   // Fetch active, uncompleted todos for this user
   const todosQuery = client
@@ -32,8 +42,6 @@ export default async function HomePage() {
     todosQuery.eq('anonymous_id', anonymousId);
   }
 
-  const { data: todos } = await todosQuery.order('created_at', { ascending: false });
-
   // Fetch pending, uncompleted revisions with joined todo details for this user
   const revisionsQuery = client
     .from('revisions')
@@ -46,8 +54,6 @@ export default async function HomePage() {
     revisionsQuery.eq('todos.anonymous_id', anonymousId);
   }
 
-  const { data: revisions } = await revisionsQuery.order('due_date', { ascending: true });
-
   // Fetch mastered topics with joined todo details for this user
   const masteredQuery = client
     .from('mastered_topics')
@@ -58,8 +64,6 @@ export default async function HomePage() {
   } else {
     masteredQuery.eq('todos.anonymous_id', anonymousId);
   }
-
-  const { data: mastered } = await masteredQuery.order('mastered_at', { ascending: false });
 
   // Fetch default todos (templates) for this user
   const defaultsQuery = client
@@ -72,7 +76,18 @@ export default async function HomePage() {
     defaultsQuery.eq('anonymous_id', anonymousId);
   }
 
-  const { data: defaults } = await defaultsQuery.order('created_at', { ascending: false });
+  // Execute all queries in parallel to drastically improve page load speeds
+  const [
+    { data: todos },
+    { data: revisions },
+    { data: mastered },
+    { data: defaults }
+  ] = await Promise.all([
+    todosQuery.order('created_at', { ascending: false }),
+    revisionsQuery.order('due_date', { ascending: true }),
+    masteredQuery.order('mastered_at', { ascending: false }),
+    defaultsQuery.order('created_at', { ascending: false }),
+  ]);
 
   return (
     <DashboardClient

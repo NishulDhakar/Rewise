@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getBlogPosts } from '@/utils/blog';
 import { BookOpen, ArrowLeft, Calendar, Clock, User } from 'lucide-react';
+import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler';
 
 export const metadata: Metadata = {
   title: 'Rewise Blog — Productivity, Memory & Spaced Repetition',
@@ -23,13 +24,16 @@ export default async function BlogIndexPage() {
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Dashboard
           </Link>
-          <div className="flex items-center gap-2">
-            <span className="text-xs px-2 py-0.5 rounded border border-brand-cyan/30 text-brand-cyan font-sans bg-brand-cyan/5">
-              BLOG
-            </span>
-            <span className="font-sans text-lg font-black tracking-widest text-text-white">
-              RE<span className="text-brand-cyan">WISE</span>
-            </span>
+          <div className="flex items-center gap-4">
+            <AnimatedThemeToggler className="flex items-center justify-center p-2 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold text-text-gray" />
+            <div className="flex items-center gap-2">
+              <span className="text-xs px-2 py-0.5 rounded border border-brand-cyan/30 text-brand-cyan font-sans bg-brand-cyan/5">
+                BLOG
+              </span>
+              <span className="font-sans text-lg font-black tracking-widest text-text-white">
+                RE<span className="text-brand-cyan">WISE</span>
+              </span>
+            </div>
           </div>
         </div>
       </header>
@@ -39,7 +43,7 @@ export default async function BlogIndexPage() {
         {/* Hero Section */}
         <div className="mb-16 text-center max-w-2xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 text-text-white">
-            Master the Art of <span className="text-transparent text-font-instrument bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-purple">Remembering</span>
+            Master the Art of Remembering
           </h1>
           <p className="text-text-gray text-base font-light font-sans leading-relaxed">
             Exploring the intersection of memory science, learning optimization, and digital productivity rules to make your knowledge permanent.

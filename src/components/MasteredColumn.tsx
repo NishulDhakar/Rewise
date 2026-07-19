@@ -43,7 +43,7 @@ export default function MasteredColumn({
         </h2>
         <button
           onClick={onToggleCollapse}
-          className="p-1 rounded text-text-dim hover:text-white"
+          className="p-1 rounded text-text-dim  "
           title="Collapse column"
         >
           <ChevronLeft className="w-4 h-4" />

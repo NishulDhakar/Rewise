@@ -42,7 +42,7 @@ export default function TodoColumn({
         <div className="flex items-center gap-2">
           <button
             onClick={onOpenSRP}
-            className="glow-btn px-3 py-1.5 rounded-lg border border-border-subtle bg-bg-dark text-text-gray hover:border-brand-green hover:text-white text-xs font-sans font-bold"
+            className="glow-btn px-3 py-1.5 rounded-lg border border-border-subtle bg-bg-dark text-text-gray hover:border-brand-green  text-xs font-sans font-bold"
             title="What is space repetition?"
           >
             SRP?
@@ -50,14 +50,14 @@ export default function TodoColumn({
 
           <button
             onClick={onOpenDefaults}
-            className="glow-btn px-3 py-1.5 rounded-lg border border-border-subtle bg-bg-dark text-text-gray hover:border-brand-green hover:text-white text-xs font-sans font-bold"
+            className="glow-btn px-3 py-1.5 rounded-lg border border-border-subtle bg-bg-dark text-text-gray hover:border-brand-green  text-xs font-sans font-bold"
             title="Manage default daily tasks"
           >
             Default
           </button>
           <button
             onClick={() => setIsFormOpen(!isFormOpen)}
-            className="glow-btn p-2 rounded-lg border border-border-subtle bg-bg-dark text-brand-cyan hover:border-brand-cyan hover:text-white"
+            className="glow-btn p-2 rounded-lg border border-border-subtle bg-bg-dark text-brand-cyan hover:border-brand-cyan"
             title="Add a new task"
           >
             <Plus className={`w-4 h-4 transform transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
@@ -90,7 +90,7 @@ export default function TodoColumn({
                     checked={todo.completed}
                     disabled={isPending}
                     onChange={(e) => onToggleTodo(todo.id, e.target.checked, 'learning')}
-                    className="mt-1 accent-brand-cyan rounded cursor-pointer"
+                    className="mt-1 font-mono accent-brand-cyan rounded cursor-pointer"
                   />
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-bold text-text-white truncate">{todo.title}</h4>

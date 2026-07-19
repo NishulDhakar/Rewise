@@ -16,6 +16,7 @@ import {
   CheckCircle,
   Play
 } from 'lucide-react';
+import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler';
 
 // ==========================================
 // Types
@@ -297,7 +298,7 @@ export default function TimeSpentPage() {
         });
 
         // Only display labels for every 5th day to avoid mobile overlapping
-        const dayLabel = idx % 5 === 0 
+        const dayLabel = idx % 5 === 0
           ? dayDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
           : '';
         data.push({ label: dayLabel, duration: durationSum });
@@ -355,7 +356,7 @@ export default function TimeSpentPage() {
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-border-subtle pb-6">
         <div>
           <Link href="/">
-            <h1 className="text-3xl font-black tracking-widest text-brand-cyan flex items-center gap-2 hover:opacity-85 transition-opacity">
+            <h1 className="text-3xl font-black tracking-widest text-brand-cyan flex items-center gap-2 hover:opacity-85 transition-opacity font-doto">
               REWISE
             </h1>
           </Link>
@@ -363,19 +364,20 @@ export default function TimeSpentPage() {
             SPACED REPETITION TASK MANAGER
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-gray">
+        <div className="flex flex-wrap items-center gap-4 text-xs font-sans">
+          <AnimatedThemeToggler className="flex items-center justify-center p-2 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold text-text-gray" />
           <Link
             href="/"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark text-text-white hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="w-3.5 h-3.5 text-text-gray" />
             Dashboard
           </Link>
           <Link
             href="/clock"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-card-dark text-text-white hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold"
           >
-            <Clock className="w-3.5 h-3.5" />
+            <Clock className="w-3.5 h-3.5 text-text-gray" />
             Clock
           </Link>
         </div>
@@ -391,11 +393,10 @@ export default function TimeSpentPage() {
             <button
               key={p}
               onClick={() => setPeriodFilter(p)}
-              className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider font-sans transition-all cursor-pointer rounded-md ${
-                periodFilter === p
+              className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider font-sans transition-all cursor-pointer rounded-md ${periodFilter === p
                   ? 'bg-brand-cyan text-bg-dark font-black shadow-md'
-                  : 'text-text-gray hover:text-white hover:bg-bg-dark/30'
-              }`}
+                  : 'text-text-gray   hover:bg-bg-dark/30'
+                }`}
             >
               {p}
             </button>
@@ -409,8 +410,8 @@ export default function TimeSpentPage() {
             className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border-subtle bg-bg-dark/40 hover:bg-bg-dark transition-all text-xs text-text-gray cursor-pointer"
           >
             <Folder className="w-3.5 h-3.5 text-brand-cyan" />
-            <span className="font-semibold">Project: </span>
-            <span className="text-text-white font-bold">
+            <span className="font-semibold font-mono">Project: </span>
+            <span className="text-text-white font-mono text-xs tracking-wider">
               {selectedProjId === 'all' ? 'All Projects' : getProjectDetails(selectedProjId).name}
             </span>
             <ChevronDown className="w-3.5 h-3.5 opacity-60" />
@@ -423,7 +424,7 @@ export default function TimeSpentPage() {
                   setSelectedProjId('all');
                   setIsProjFilterDropdownOpen(false);
                 }}
-                className="w-full flex items-center gap-2 p-2 hover:bg-bg-dark text-left text-xs text-text-gray hover:text-white cursor-pointer rounded-lg"
+                className="w-full flex items-center gap-2 p-2 hover:bg-bg-dark text-left text-xs text-text-gray   cursor-pointer rounded-lg"
               >
                 <span className="w-2.5 h-2.5 rounded-full border border-dashed border-border-subtle inline-block" />
                 <span>All Projects</span>
@@ -435,7 +436,7 @@ export default function TimeSpentPage() {
                     setSelectedProjId(proj.id);
                     setIsProjFilterDropdownOpen(false);
                   }}
-                  className="w-full flex items-center gap-2 p-2 hover:bg-bg-dark text-left text-xs text-text-gray hover:text-white cursor-pointer rounded-lg"
+                  className="w-full flex items-center gap-2 p-2 hover:bg-bg-dark text-left text-xs text-text-gray cursor-pointer rounded-lg"
                 >
                   <span
                     className="w-2.5 h-2.5 rounded-full inline-block"
@@ -455,7 +456,7 @@ export default function TimeSpentPage() {
       {sessionCount === 0 ? (
         <div className="glow-card bg-card-dark border border-border-subtle rounded-xl py-20 px-6 text-center text-text-dim flex-1 flex flex-col items-center justify-center">
           <Clock className="w-16 h-16 stroke-[1] mb-4 text-text-dim animate-pulse" />
-          <h3 className="text-base font-bold tracking-widest uppercase font-doto">No tracking records found</h3>
+          <h3 className="text-base font-bold tracking-widest uppercase">No tracking records found</h3>
           <p className="text-xs font-sans mt-2 text-text-gray max-w-sm leading-relaxed">
             There are no logs matching the filter settings in your local storage. Go to the clock page, track some sessions, and your analytics will automatically build!
           </p>
@@ -472,38 +473,38 @@ export default function TimeSpentPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {/* Metric 1: Total Duration */}
             <div className="bg-card-dark border border-border-subtle p-5 rounded-xl glow-card flex flex-col justify-between">
-              <span className="text-[10px] text-text-gray font-bold tracking-widest uppercase font-sans">
+              <span className="text-[12px] text-text-gray font-bold tracking-widest uppercase font-sans">
                 Time Tracked
               </span>
               <div className="mt-2 flex items-baseline">
-                <span className="font-doto text-2xl font-black tracking-wider text-brand-cyan">
+                <span className="font-mono text-2xl font-black tracking-wider text-brand-cyan">
                   {formatTimeText(totalDuration)}
                 </span>
               </div>
-              <span className="text-[9px] text-text-dim font-sans mt-1">
+              <span className="text-[12px] text-text-dim font-sans mt-1">
                 cumulative duration
               </span>
             </div>
 
             {/* Metric 2: Sessions */}
             <div className="bg-card-dark border border-border-subtle p-5 rounded-xl glow-card flex flex-col justify-between">
-              <span className="text-[10px] text-text-gray font-bold tracking-widest uppercase font-sans">
+              <span className="text-[12px] text-text-gray font-bold tracking-widest uppercase font-sans">
                 Tracked Sessions
               </span>
               <div className="mt-2 flex items-baseline">
-                <span className="font-doto text-2xl font-black tracking-wider text-brand-green">
+                <span className="font-mono text-2xl font-black tracking-wider text-brand-green">
                   {sessionCount}
                 </span>
                 <span className="text-xs text-text-dim ml-1 font-sans">runs</span>
               </div>
-              <span className="text-[9px] text-text-dim font-sans mt-1">
+              <span className="text-[12px] text-text-dim font-sans mt-1">
                 total completed starts
               </span>
             </div>
 
             {/* Metric 3: Top Project */}
             <div className="bg-card-dark border border-border-subtle p-5 rounded-xl glow-card flex flex-col justify-between">
-              <span className="text-[10px] text-text-gray font-bold tracking-widest uppercase font-sans">
+              <span className="text-[12px] text-text-gray font-bold tracking-widest uppercase font-sans">
                 Top Project
               </span>
               <div className="mt-2 flex flex-col min-w-0">
@@ -513,29 +514,29 @@ export default function TimeSpentPage() {
                 >
                   {topProject.name}
                 </span>
-                <span className="font-doto text-xs font-semibold text-text-white tracking-widest mt-1">
+                <span className="font-mono text-xs font-light tracking-widest mt-1">
                   {formatTimeText(topProject.duration)}
                 </span>
               </div>
-              <span className="text-[9px] text-text-dim font-sans mt-1">
+              <span className="text-[12px] text-text-dim font-sans mt-1">
                 most focused area
               </span>
             </div>
 
             {/* Metric 4: Top Task */}
             <div className="bg-card-dark border border-border-subtle p-5 rounded-xl glow-card flex flex-col justify-between">
-              <span className="text-[10px] text-text-gray font-bold tracking-widest uppercase font-sans">
+              <span className="text-[12px] text-text-gray font-bold tracking-widest uppercase font-sans">
                 Top Focused Task
               </span>
               <div className="mt-2 flex flex-col min-w-0">
                 <span className="font-bold text-sm text-text-white truncate font-sans">
                   {topTask.description}
                 </span>
-                <span className="font-doto text-xs font-semibold text-brand-purple tracking-widest mt-1">
+                <span className="font-mono text-xs font-light text-brand-cyan tracking-widest mt-1">
                   {formatTimeText(topTask.duration)}
                 </span>
               </div>
-              <span className="text-[9px] text-text-dim font-sans mt-1">
+              <span className="text-[12px] text-text-dim font-sans mt-1">
                 most logged description
               </span>
             </div>
@@ -566,8 +567,8 @@ export default function TimeSpentPage() {
                         <span className="truncate text-text-white font-semibold">{proj.name}</span>
                       </div>
                       <div className="flex items-center gap-2 font-doto shrink-0">
-                        <span className="text-text-white font-bold">{formatTimeText(proj.duration)}</span>
-                        <span className="text-text-dim">({Math.round(proj.percentage)}%)</span>
+                        <span className="text-brand-cyan font-mono font-bold">{formatTimeText(proj.duration)}</span>
+                        <span className="text-text-dim font-mono">({Math.round(proj.percentage)}%)</span>
                       </div>
                     </div>
                     {/* Progress Bar Container */}
@@ -610,7 +611,7 @@ export default function TimeSpentPage() {
                         className="flex-1 flex flex-col items-center group relative h-full justify-end cursor-help"
                       >
                         {/* Tooltip on hover */}
-                        <div className="absolute bottom-full mb-1 opacity-0 group-hover:opacity-100 transition-opacity bg-bg-dark border border-border-glow text-[10px] font-bold text-brand-cyan font-doto px-2 py-1 rounded shadow-lg pointer-events-none z-10 whitespace-nowrap">
+                        <div className="absolute bottom-full font-mono mb-1 opacity-0 group-hover:opacity-100 transition-opacity bg-bg-dark border border-border-glow text-[10px] font-bold text-brand-cyan px-2 py-1 rounded shadow-lg pointer-events-none z-10 whitespace-nowrap">
                           {formatTimeText(dataItem.duration)}
                         </div>
 
@@ -680,18 +681,18 @@ export default function TimeSpentPage() {
                             <span>{projDetails.name}</span>
                           </div>
                         </td>
-                        <td className="py-3 pr-4 text-center font-doto font-bold text-text-white">
+                        <td className="py-3 pr-4 text-center font-mono font-bold text-text-white">
                           {taskItem.sessions}
                         </td>
-                        <td className="py-3 pr-4 text-right font-doto">
+                        <td className="py-3 pr-4 text-right font-mono text-text-white">
                           {formatDetailedTime(avgDuration)}
                         </td>
                         <td className="py-3 text-right">
                           <div className="flex flex-col items-end">
-                            <span className="font-doto font-black text-text-white tracking-wide">
+                            <span className="font-mono font-black text-brand-cyan tracking-wide">
                               {formatDetailedTime(taskItem.duration)}
                             </span>
-                            <span className="text-[9px] text-text-dim">
+                            <span className="text-[10px] text-text-dim">
                               {Math.round(taskItem.percentage)}% of total
                             </span>
                           </div>

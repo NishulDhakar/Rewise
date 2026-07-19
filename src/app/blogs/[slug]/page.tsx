@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import fs from 'fs';
 import path from 'path';
 import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
+import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -84,9 +85,12 @@ export default async function BlogPostPage({ params }: PageProps) {
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Blog
           </Link>
-          <span className="font-sans text-lg font-black tracking-widest text-text-white">
-            RE<span className="text-brand-cyan">WISE</span>
-          </span>
+          <div className="flex items-center gap-4">
+            <AnimatedThemeToggler className="flex items-center justify-center p-2 rounded-lg border border-border-subtle bg-card-dark hover:border-brand-cyan hover:text-brand-cyan transition-all text-xs glow-btn font-semibold text-text-gray" />
+            <span className="font-sans text-lg font-black tracking-widest text-text-white">
+              RE<span className="text-brand-cyan">WISE</span>
+            </span>
+          </div>
         </div>
       </header>
 
@@ -121,7 +125,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             </h1>
 
             {/* Description */}
-            <p className="text-text-gray text-md font-light font-sans leading-relaxed">
+            <p className="text-text-gray font-medium text-md font-sans leading-relaxed">
               {metadata.description}
             </p>
           </header>

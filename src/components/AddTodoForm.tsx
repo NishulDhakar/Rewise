@@ -37,7 +37,7 @@ export default function AddTodoForm({ onClose, onSubmit, isPending }: AddTodoFor
           placeholder="Task title..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full bg-bg-dark border border-border-subtle rounded px-3 py-2 text-sm text-text-white placeholder:text-text-dim focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan"
+          className="w-full bg-bg-dark border border-border-subtle rounded px-3 py-2 text-sm text-text-white placeholder:text-text-dim font-mono focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan"
           required
         />
       </div>
@@ -46,11 +46,11 @@ export default function AddTodoForm({ onClose, onSubmit, isPending }: AddTodoFor
           placeholder="Add details / notes..."
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full bg-bg-dark border border-border-subtle rounded px-3 py-2 text-sm text-text-white placeholder:text-text-dim h-20 resize-none focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan"
+          className="w-full bg-bg-dark border border-border-subtle rounded px-3 py-2 text-sm text-text-white placeholder:text-text-dim font-mono h-20 resize-none focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan"
         />
       </div>
       <div className="flex gap-4 items-center">
-        <span className="text-xs text-text-gray font-sans">Type:</span>
+        <span className="text-sm text-text-gray font-sans">Type:</span>
         <label className="flex items-center gap-1.5 cursor-pointer text-xs">
           <input
             type="radio"
@@ -59,7 +59,7 @@ export default function AddTodoForm({ onClose, onSubmit, isPending }: AddTodoFor
             onChange={() => setTaskType('learning')}
             className="accent-brand-cyan"
           />
-          <span>SRP-Learning</span>
+          <span className='font-mono font-light'>SRP-Learning</span>
         </label>
         <label className="flex items-center gap-1.5 cursor-pointer text-xs">
           <input
@@ -69,7 +69,7 @@ export default function AddTodoForm({ onClose, onSubmit, isPending }: AddTodoFor
             onChange={() => setTaskType('daily')}
             className="accent-brand-cyan"
           />
-          <span>Daily Task</span>
+          <span className='font-mono font-light'>Daily Task</span>
         </label>
       </div>
       {error && (
@@ -79,14 +79,14 @@ export default function AddTodoForm({ onClose, onSubmit, isPending }: AddTodoFor
         <button
           type="button"
           onClick={onClose}
-          className="px-3 py-1.5 rounded border border-border-subtle hover:bg-card-dark text-text-gray"
+          className="px-3 py-1.5 font-mono font-light rounded border border-border-subtle hover:bg-card-dark text-text-gray"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isPending}
-          className="px-3 py-1.5 rounded bg-brand-cyan text-bg-dark font-bold hover:bg-cyan-400 flex items-center gap-1"
+          className="px-3 py-1.5 font-mono font-light rounded bg-brand-cyan text-bg-dark font-bold hover:bg-cyan-400 flex items-center gap-1"
         >
           {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Create'}
         </button>

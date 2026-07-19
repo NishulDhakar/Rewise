@@ -1,9 +1,29 @@
 -- Rewise Database Schema
 -- Run this in your Supabase SQL Editor if you ever need to recreate the database.
 
--- 1. Create Todos Table
+-- 1. Create Profiles Table
+CREATE TABLE IF NOT EXISTS public.profiles (
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    email TEXT,
+    full_name TEXT,
+    avatar_url TEXT,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable RLS and insert default policies for profiles
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow public read profiles" ON public.profiles;
+CREATE POLICY "Allow public read profiles" ON public.profiles FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Allow user update profile" ON public.profiles;
+CREATE POLICY "Allow user update profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+DROP POLICY IF EXISTS "Allow user insert/upsert profile" ON public.profiles;
+CREATE POLICY "Allow user insert/upsert profile" ON public.profiles FOR INSERT WITH CHECK (auth.uid() = id);
+
+
+-- 2. Create Todos Table
 CREATE TABLE IF NOT EXISTS public.todos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     anonymous_id UUID,
     title TEXT NOT NULL,
     description TEXT,
@@ -11,6 +31,7 @@ CREATE TABLE IF NOT EXISTS public.todos (
     completed BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+CREATE INDEX IF NOT EXISTS todos_user_id_idx ON public.todos(user_id);
 CREATE INDEX IF NOT EXISTS todos_anonymous_id_idx ON public.todos(anonymous_id);
 
 -- Enable RLS and insert default policies for anon access
@@ -25,7 +46,7 @@ DROP POLICY IF EXISTS "Allow anon delete" ON public.todos;
 CREATE POLICY "Allow anon delete" ON public.todos FOR DELETE USING (true);
 
 
--- 2. Create Revisions Table
+-- 3. Create Revisions Table
 CREATE TABLE IF NOT EXISTS public.revisions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     todo_id UUID NOT NULL REFERENCES public.todos(id) ON DELETE CASCADE,
@@ -47,7 +68,7 @@ DROP POLICY IF EXISTS "Allow anon delete" ON public.revisions;
 CREATE POLICY "Allow anon delete" ON public.revisions FOR DELETE USING (true);
 
 
--- 3. Create Mastered Topics Table
+-- 4. Create Mastered Topics Table
 CREATE TABLE IF NOT EXISTS public.mastered_topics (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     todo_id UUID NOT NULL REFERENCES public.todos(id) ON DELETE CASCADE,
@@ -64,14 +85,16 @@ DROP POLICY IF EXISTS "Allow anon delete" ON public.mastered_topics;
 CREATE POLICY "Allow anon delete" ON public.mastered_topics FOR DELETE USING (true);
 
 
--- 4. Create Default Todos Table
+-- 5. Create Default Todos Table
 CREATE TABLE IF NOT EXISTS public.default_todos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     anonymous_id UUID,
     title TEXT NOT NULL,
     description TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+CREATE INDEX IF NOT EXISTS default_todos_user_id_idx ON public.default_todos(user_id);
 CREATE INDEX IF NOT EXISTS default_todos_anonymous_id_idx ON public.default_todos(anonymous_id);
 
 -- Enable RLS and insert default policies for anon access

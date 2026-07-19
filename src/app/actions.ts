@@ -6,10 +6,19 @@ import { getAnonymousId } from '../utils/anonymous';
 import { cookies } from 'next/headers';
 
 export async function getUserOrAnonymous() {
-  const client = await getServerSupabase();
-  const anonymousId = await getAnonymousId();
+  const [client, anonymousId, cookieStore] = await Promise.all([
+    getServerSupabase(),
+    getAnonymousId(),
+    cookies(),
+  ]);
   
-  const { data: { user } } = await client.auth.getUser().catch(() => ({ data: { user: null } }));
+  const hasToken = cookieStore.has('rewise_session_token');
+  let user = null;
+
+  if (hasToken) {
+    const res = await client.auth.getUser().catch(() => ({ data: { user: null } }));
+    user = res.data?.user || null;
+  }
 
   return {
     userId: user?.id || null,
